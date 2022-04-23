@@ -50,7 +50,7 @@ def SearchBar(request):
         c = c[3:-2]
         post = Champion.objects.filter(Class = c)
 
-    return render(request, 'getchamp/index.html',{'post': post})
+    return render(request, 'getchamp/all_champion.html',{'post': post})
 
 
 
