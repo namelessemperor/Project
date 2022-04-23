@@ -80,7 +80,14 @@ def TeamBuilding(request):
         c = str(list(request.GET.keys()))
         c = c[3:-2]
         post = Champion.objects.filter(Class = c)
-    return render(request, 'getchamp/teambuilder.html',{'post': post})
+    team = TeamBuilder.objects.all()
+    tem = Champion.objects.filter(Name = 'Jinx')
+    if 'iname' in request.GET:
+        iname = request.GET['iname']
+        tem = Champion.objects.filter(Name = iname)
+
+    b = TeamBuilder.objects.filter(pk =1 )
+    return render(request, 'getchamp/teambuilder.html',{'post': post, 'team': team,'tem':tem})
 
 #API
 class APIChampion(viewsets.ModelViewSet):
@@ -92,7 +99,6 @@ def ChampionInfo(request):
     info = request.GET['xname']
     post = Champion.objects.filter(Name = info)
     return render(request, 'getchamp/champion_info.html', {'post':post})
-
 #Tao team name
 def TeamName(request):
     if 'text' in request.GET:
@@ -103,5 +109,3 @@ def TeamName(request):
         b.save()
         return redirect('/app/teambuild')
     return render(request, 'getchamp/create_team_name.html')
-
-

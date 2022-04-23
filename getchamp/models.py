@@ -21,7 +21,6 @@ class TeamBuilder(models.Model):
     def __str__(self):
         return self.TeamName
 
-        
 class Champion(models.Model):
     Team = models.ManyToManyField(TeamBuilder)
     Name = models.CharField(max_length=30)
