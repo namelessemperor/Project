@@ -2,7 +2,7 @@ from ast import Or
 from msilib.schema import Class
 import re
 from turtle import title
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.template import Origin
 from .models import Champion
@@ -82,40 +82,26 @@ def TeamBuilding(request):
         post = Champion.objects.filter(Class = c)
     return render(request, 'getchamp/teambuilder.html',{'post': post})
 
-
+#API
 class APIChampion(viewsets.ModelViewSet):
     queryset = Champion.objects.filter()
     serializer_class = ChampionSerializer
 
-
+#hien thong tin ve tuong khi click vao
 def ChampionInfo(request):
     info = request.GET['xname']
     post = Champion.objects.filter(Name = info)
     return render(request, 'getchamp/champion_info.html', {'post':post})
 
-
-
+#Tao team name
 def TeamName(request):
     if 'text' in request.GET:
         team = request.GET['text']
         team.replace('+',' ')
-    else:
-        return render(request, 'getchamp/create_team_name.html')
-    
-    user = User.objects.get(pk = 1)
-    b = TeamBuilder(TeamName = team, Player = user)
-    b.save()
+        user = User.objects.get(pk = 1)
+        b = TeamBuilder(TeamName = team, Player = user)
+        b.save()
+        return redirect('/app/teambuild')
     return render(request, 'getchamp/create_team_name.html')
 
-def Save(request):
-    
-    if 'build' in request.GET:
-        build = request.GET['build']
-    else:
-        return render(request, 'getchamp/teambuilder.html')
-    
-    champ = Champion.objects.get(Name = build)
-    champ.team.add()
 
-
-    return render(request, 'getchamp/teambuilder.html')
